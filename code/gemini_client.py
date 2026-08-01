@@ -31,10 +31,12 @@ ENV_FILE = REPO_ROOT / ".env"
 
 DEFAULT_MODEL = "gemini-3.6-flash"
 
-# The free tier allows 5 requests per minute, so calls are spaced ~13s apart.
+# Light pacing only. The paid tier allows far more than this; the free tier
+# capped requests per DAY, which no amount of spacing could work around.
+# Raise GEMINI_MIN_INTERVAL if you ever run against a rate-limited key.
 # Only real API calls are throttled; cache hits return immediately.
-DEFAULT_MIN_INTERVAL = 13.0
-MAX_ATTEMPTS = 6
+DEFAULT_MIN_INTERVAL = 1.0
+MAX_ATTEMPTS = 3
 RETRY_STATUS_CODES = {429, 500, 502, 503, 504}
 
 _last_call_at = 0.0
@@ -215,8 +217,8 @@ def _retry_after(error: Exception, attempt: int) -> float:
     """Honour the server's own retry delay when it gives one."""
     match = re.search(r"retry in ([\d.]+)s", str(error))
     if match:
-        return float(match.group(1)) + 1.0
-    return min(60.0, 5.0 * 2 ** (attempt - 1))
+        return float(match.group(1)) + 5.0
+    return min(120.0, 30.0 * 2 ** (attempt - 1))
 
 
 def _generate(parts: list[types.Part]):
