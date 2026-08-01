@@ -176,6 +176,17 @@ def messages() -> list[Message]:
 
 
 @lru_cache(maxsize=None)
+def sample_messages() -> list[Message]:
+    """The 30 labelled examples.
+
+    _build() only reads fields declared on Message, so the label columns
+    (action, message_type, reason, confidence, evidence_message_ids) are
+    dropped here and can never reach a prompt.
+    """
+    return _read("sample_messages.csv", Message)
+
+
+@lru_cache(maxsize=None)
 def users() -> dict[str, User]:
     return {row.user_id: row for row in _read("users.csv", User)}
 
