@@ -11,21 +11,18 @@ No routing decisions are made here.
 import csv
 import re
 from dataclasses import dataclass, fields
-from datetime import datetime, time, timedelta
+from datetime import datetime, time
 from functools import lru_cache
 from pathlib import Path
 
 DATASET_DIR = Path(__file__).resolve().parent.parent / "dataset"
 
 TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M"
-DATE_FORMAT = "%Y-%m-%d"
 
 # How many history rows build_context() carries per message.
 HISTORY_LIMIT = 8
 # Jaccard score at or above which two messages are called near-duplicates.
 NEAR_DUPLICATE_THRESHOLD = 0.6
-# Window used for the recent dismiss ratio, in days.
-FATIGUE_WINDOW_DAYS = 7
 
 # build_context() always emits exactly these signal keys, in this order, so the
 # decision layer can read any of them without guarding for absence.
@@ -240,6 +237,29 @@ def daily_summaries() -> dict[tuple[str, str], DailySummary]:
 
 
 @lru_cache(maxsize=None)
+def notification_baselines() -> dict[str, dict]:
+    """Each user's habitual notification load, aggregated over the whole table.
+
+    daily_notification_summary.csv ends the day before messages.csv begins, so a
+    same-day lookup is always empty. The habit is the usable signal.
+    """
+    totals: dict[str, dict] = {}
+    for row in daily_summaries().values():
+        entry = totals.setdefault(
+            row.user_id, {"days": 0, "sent": 0, "dismissed": 0}
+        )
+        entry["days"] += 1
+        entry["sent"] += row.notifications_sent
+        entry["dismissed"] += row.notifications_dismissed
+    for entry in totals.values():
+        entry["per_day"] = entry["sent"] / entry["days"] if entry["days"] else 0.0
+        entry["dismiss_ratio"] = (
+            entry["dismissed"] / entry["sent"] if entry["sent"] else 0.0
+        )
+    return totals
+
+
+@lru_cache(maxsize=None)
 def media_paths() -> dict[str, str]:
     """Both media tables keyed by media_id; the id namespaces do not overlap."""
     paths = {}
@@ -356,28 +376,15 @@ def _near_duplicate(message: Message) -> tuple[dict | None, str]:
 
 
 def _fatigue(message: Message) -> str:
-    day = message.timestamp.date()
-    today = daily_summaries().get((message.user_id, day.strftime(DATE_FORMAT)))
-    sent_today = today.notifications_sent if today else 0
-
-    window_sent = window_dismissed = 0
-    for offset in range(FATIGUE_WINDOW_DAYS):
-        stamp = (day - timedelta(days=offset)).strftime(DATE_FORMAT)
-        row = daily_summaries().get((message.user_id, stamp))
-        if row:
-            window_sent += row.notifications_sent
-            window_dismissed += row.notifications_dismissed
-
-    if not window_sent:
-        return (
-            f"{sent_today} notifications already sent on {day}; no recent "
-            "notification history to judge dismissal habits."
-        )
-    ratio = window_dismissed / window_sent
+    """This user's habitual notification load and dismissal rate."""
+    baseline = notification_baselines().get(message.user_id)
+    if baseline is None or not baseline["sent"]:
+        return "No notification history on record for this user."
     return (
-        f"{sent_today} notifications already sent on {day}; over the last "
-        f"{FATIGUE_WINDOW_DAYS} days this user dismissed {window_dismissed} of "
-        f"{window_sent} ({ratio:.0%})."
+        f"This user averages {baseline['per_day']:.1f} notifications a day and "
+        f"dismisses {baseline['dismiss_ratio']:.0%} of them "
+        f"({baseline['dismissed']} of {baseline['sent']} over "
+        f"{baseline['days']} days)."
     )
 
 
