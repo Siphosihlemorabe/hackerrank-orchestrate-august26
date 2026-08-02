@@ -559,8 +559,9 @@ def _media_signal(message: Message) -> tuple[dict | None, str]:
         "full_path": str(DATASET_DIR / relative),
     }
     return media, (
-        f"Carries a {message.media_type} at {relative}; its content is not read "
-        "here and must be inspected downstream."
+        f"Carries a {message.media_type} at {relative}. The file itself is "
+        "attached to the routing call, so judge its content directly rather "
+        "than inferring it from the message text."
     )
 
 

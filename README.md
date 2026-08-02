@@ -14,6 +14,18 @@ Read [`problem_statement.md`](./problem_statement.md) for the full task spec, in
 
 ---
 
+## Running This Solution
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env          # then add your GEMINI_API_KEY
+python code/main.py           # writes output.csv
+```
+
+See [`code/README.md`](./code/README.md) for setup detail, evaluation commands, ablation flags, caching behaviour, and how the pipeline works.
+
+---
+
 ## Repository Layout
 
 ```text

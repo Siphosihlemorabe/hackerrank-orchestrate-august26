@@ -16,14 +16,14 @@ sample_msg_014,mute,forward,This is a heavily forwarded chain message with low p
 sample_msg_015,mute,promotion,The user has explicitly opted out of promotions from this business and previously muted an identical message.,0.83,message_0017
 sample_msg_019,mute,scam,This message is a phishing scam directing users to an unverified external URL with urgent security threats.,0.80,message_0023;message_0045
 sample_msg_020,mute,scam,"This message is a phishing attempt asking for sensitive credentials like passwords and OTPs, consistent with previously reported scam messages from this sender.",0.80,message_0024
-sample_msg_041,digest,personal,"The voice note is a non-urgent personal check-in asking to call when free, making it appropriate for a digest.",0.75,message_0046
-sample_msg_042,notify,urgent,The voice note reports an urgent family situation requiring an immediate call as Dad is unwell and heading to the clinic.,0.71,none
-sample_msg_043,mute,spam,"This unsolicited voice message comes from an unverified business account with a domain mismatch and numerous recent reports, which the user has previously muted and reported.",0.79,message_0357
-sample_msg_044,digest,promotion,This is a general marketplace sale listing in a large group without a direct mention or immediate urgency.,0.83,message_0401
-sample_msg_045,mute,promotion,The user has muted the Myntra Marketplace group and this message does not contain a direct @-mention.,0.76,none
-sample_msg_046,notify,event,"The group admin shared an important field trip consent form circular, which requires timely parent review and signature based on your past rapid engagement with similar school notices.",0.87,message_0403;message_0051
-sample_msg_047,mute,promotion,"This promotional message is an exact near-duplicate of message_0402, after which the user previously muted the conversation.",0.89,message_0402
-sample_msg_048,digest,business_update,"This safety advisory from a business is informative but not time-sensitive or personally targeted, so it belongs in a digest.",0.83,message_0412
+sample_msg_041,digest,personal,"The sender explicitly states in the voice note that nothing is urgent, making it suitable for a summary digest.",0.75,message_0046
+sample_msg_042,notify,urgent,The incoming voice message urgently requests a call because a family member is unwell and being taken to the clinic.,0.71,none
+sample_msg_043,mute,spam,This unsolicited voice note comes from an unverified business account with a recent domain mismatch that the user has previously muted and reported for spam.,0.79,message_0357
+sample_msg_044,digest,promotion,"This is a general marketplace item listing without an @-mention in a large group, making it suitable for a digest summary.",0.83,message_0401
+sample_msg_045,mute,promotion,This message is from a group that the user has muted and does not directly @-mention the user.,0.76,none
+sample_msg_046,notify,event,The user consistently responds immediately to school circulars and consent forms sent by this group admin.,0.87,message_0403;message_0051
+sample_msg_047,mute,promotion,"This is a promotional offer message identical to message_0402, after which you muted the conversation.",0.89,message_0402
+sample_msg_048,digest,business_update,This general safety advisory from a verified business is non-urgent informational content best suited for later review in a digest.,0.83,message_0412
 sample_msg_049,notify,personal,"This is a direct, actionable personal inquiry regarding volunteer coordination for an upcoming event.",0.71,none
 sample_msg_050,digest,personal,The message is a non-urgent personal update that explicitly asks the user not to call tonight and states that nothing is urgent.,0.75,message_0054
 sample_msg_051,notify,urgent,"The message is an urgent request regarding a technical escalation starting in 20 minutes, which the user historically responds to within two minutes.",0.80,message_0228

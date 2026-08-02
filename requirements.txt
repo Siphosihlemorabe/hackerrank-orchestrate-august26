@@ -1,0 +1,5 @@
+# Message Notification Router - runtime dependencies.
+# Tested with Python 3.13.7; requires 3.10 or newer for PEP 604 annotations.
+
+google-genai>=2.16.0
+pydantic>=2.13.4
