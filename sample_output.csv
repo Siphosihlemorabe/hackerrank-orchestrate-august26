@@ -1,31 +1,31 @@
 message_id,action,message_type,reason,confidence,evidence_message_ids
-sample_msg_001,notify,urgent,"This is a time-sensitive 20-minute water supply warning for Tower B, a specific type of emergency notice from the group admin that you have historically responded to immediately.",0.95,message_0129;message_0189
-sample_msg_002,notify,urgent,"This is an urgent, time-sensitive update regarding an early school bus departure that the user has historically responded to quickly.",0.95,message_0133;message_0209
-sample_msg_003,notify,urgent,The message directly mentions you regarding a time-sensitive schedule change for a production review requiring immediate action before EOD.,0.95,message_0170;message_0003
-sample_msg_004,notify,business_update,This is a legitimate order delivery update from a verified business account that the user consistently engages with promptly.,0.92,message_0239
-sample_msg_005,notify,business_update,This is an important health-related update from a verified healthcare provider regarding an upcoming appointment or prescription that the user historically responds to promptly.,0.95,message_0246
-sample_msg_006,notify,personal,The message directly @-mentions the user to confirm details for a Sunday pickup before finalizing a cab count.,0.95,message_0006
-sample_msg_007,digest,promotion,"This is a non-urgent marketing message for a travel package, which is suitable for your periodic digest.",0.90,message_0272
-sample_msg_008,digest,event,"This is a non-urgent community event announcement with no direct mention, suitable for a digest before next Sunday's deadline.",0.95,message_0008
-sample_msg_009,digest,greeting,This is a non-urgent general greeting to the family group that requires no immediate action or response.,0.95,message_0009
-sample_msg_010,digest,personal,"This is a casual, non-urgent group chat message without a direct mention, suitable for a summary digest rather than an immediate interruption.",0.85,message_0010
-sample_msg_011,digest,business_update,This is a non-urgent feedback request from a verified business that can be reviewed later in a summary rather than interrupting the user.,0.90,message_0011
-sample_msg_012,digest,promotion,This is a general buy-and-sell item listing in a group chat without a direct mention or urgent call to action.,0.90,message_0012
-sample_msg_013,mute,forward,"This is an unmentioned, heavily forwarded generic greeting sent to a muted family group.",0.95,message_0077;message_0014
-sample_msg_014,mute,forward,This is a heavily forwarded chain message with low personal relevance that matches content the user previously muted.,0.95,message_0015
-sample_msg_015,mute,promotion,"The user has explicitly opted out of promotions from this sender, and this exact promotional message was previously muted.",0.98,message_0017
-sample_msg_019,mute,scam,This message is a phishing scam directing users to an unverified external URL with urgent security threats.,0.98,message_0023;message_0045
-sample_msg_020,mute,scam,"This message is a phishing attempt asking for sensitive credentials like passwords and OTPs, consistent with previously reported scam messages from this sender.",0.98,message_0024;message_0087
-sample_msg_041,digest,personal,"The voice note is a non-urgent personal check-in asking to call when free, making it appropriate for a digest.",0.92,message_0046
-sample_msg_042,notify,urgent,The voice note reports an urgent family situation requiring an immediate call as Dad is unwell and heading to the clinic.,0.98,none
-sample_msg_043,mute,spam,This voice message is unsolicited spam from an unverified business account that has recent user reports and was previously reported by the user.,0.95,message_0048;message_0357
-sample_msg_044,digest,promotion,This is a general marketplace sale listing in a large group without a direct mention or immediate urgency.,0.85,message_0401
-sample_msg_045,mute,promotion,The user has muted the Myntra Marketplace group and this message does not contain a direct @-mention.,0.95,none
-sample_msg_046,notify,event,"The group admin shared an important field trip consent form circular, which requires timely parent review and signature based on your past rapid engagement with similar school notices.",0.95,message_0403;message_0051
-sample_msg_047,mute,promotion,This is a promotional shopping offer that is a near-duplicate of a previous message after which you muted the conversation.,0.95,message_0402
-sample_msg_048,digest,business_update,"This is a non-urgent security advisory from a verified business, making it suitable for a later digest.",0.92,message_0412
-sample_msg_049,notify,personal,"This is a direct, actionable personal inquiry regarding volunteer coordination for an upcoming event.",0.95,none
-sample_msg_050,digest,personal,The message is a non-urgent personal update that explicitly asks the user not to call tonight and states that nothing is urgent.,0.95,message_0054;message_0225
-sample_msg_051,notify,urgent,"The message is an urgent request regarding a technical escalation starting in 20 minutes, which the user historically responds to within two minutes.",0.95,message_0055;message_0228;message_0362
-sample_msg_052,mute,scam,This message requests a 6-digit login code and is a near-duplicate of a previously reported scam attempt from the same sender.,0.98,message_0238;message_0381
-sample_msg_053,mute,scam,"The message attempts a prompt injection and requests a one-time password (OTP) for wallet verification, indicating a severe scam risk.",0.98,message_0056;message_0369;message_0235
+sample_msg_001,notify,urgent,"This is a time-sensitive 20-minute water supply warning for Tower B, a specific type of emergency notice from the group admin that you have historically responded to immediately.",0.75,message_0129
+sample_msg_002,notify,urgent,"This is an urgent, time-sensitive update regarding an early school bus departure that the user has historically responded to quickly.",0.80,message_0133
+sample_msg_003,notify,urgent,The message directly mentions you regarding a time-sensitive schedule change for a production review requiring immediate action before EOD.,0.85,message_0003
+sample_msg_004,notify,business_update,"This is an active order delivery update from a verified business account, and the user has consistently engaged with similar updates promptly.",0.87,message_0239
+sample_msg_005,notify,business_update,"This is a time-sensitive healthcare update from a verified provider regarding upcoming appointment or prescription details, which the user consistently engages with promptly.",0.87,message_0245;message_0005
+sample_msg_006,notify,personal,The message directly @-mentions the user to confirm details for a Sunday pickup before finalizing a cab count.,0.85,message_0006
+sample_msg_007,digest,promotion,"This is a non-urgent promotional message from a verified business whose marketing the user allows, making it suitable for a digest.",0.83,message_0272
+sample_msg_008,digest,event,"This is a non-urgent community event announcement with no direct mention, suitable for a digest before next Sunday's deadline.",0.80,message_0008
+sample_msg_009,digest,greeting,This is a non-urgent general greeting to the family group that requires no immediate action or response.,0.75,message_0009
+sample_msg_010,digest,personal,"This is a casual, non-urgent group chat message without a direct mention, suitable for a summary digest rather than an immediate interruption.",0.80,message_0010
+sample_msg_011,digest,business_update,"This feedback request from PVR Cinemas is non-urgent routine communication and a duplicate of a recent message, so it can be summarized later.",0.83,message_0011
+sample_msg_012,digest,promotion,This is a general buy-and-sell item listing in a group chat without a direct mention or urgent call to action.,0.80,message_0012
+sample_msg_013,mute,forward,"This is an unmentioned, heavily forwarded generic greeting sent to a muted family group.",0.80,message_0014
+sample_msg_014,mute,forward,This is a heavily forwarded chain message with low personal relevance that matches content the user previously muted.,0.80,message_0015
+sample_msg_015,mute,promotion,The user has explicitly opted out of promotions from this business and previously muted an identical message.,0.83,message_0017
+sample_msg_019,mute,scam,This message is a phishing scam directing users to an unverified external URL with urgent security threats.,0.80,message_0023;message_0045
+sample_msg_020,mute,scam,"This message is a phishing attempt asking for sensitive credentials like passwords and OTPs, consistent with previously reported scam messages from this sender.",0.80,message_0024
+sample_msg_041,digest,personal,"The voice note is a non-urgent personal check-in asking to call when free, making it appropriate for a digest.",0.75,message_0046
+sample_msg_042,notify,urgent,The voice note reports an urgent family situation requiring an immediate call as Dad is unwell and heading to the clinic.,0.71,none
+sample_msg_043,mute,spam,"This unsolicited voice message comes from an unverified business account with a domain mismatch and numerous recent reports, which the user has previously muted and reported.",0.79,message_0357
+sample_msg_044,digest,promotion,This is a general marketplace sale listing in a large group without a direct mention or immediate urgency.,0.83,message_0401
+sample_msg_045,mute,promotion,The user has muted the Myntra Marketplace group and this message does not contain a direct @-mention.,0.76,none
+sample_msg_046,notify,event,"The group admin shared an important field trip consent form circular, which requires timely parent review and signature based on your past rapid engagement with similar school notices.",0.87,message_0403;message_0051
+sample_msg_047,mute,promotion,"This promotional message is an exact near-duplicate of message_0402, after which the user previously muted the conversation.",0.89,message_0402
+sample_msg_048,digest,business_update,"This safety advisory from a business is informative but not time-sensitive or personally targeted, so it belongs in a digest.",0.83,message_0412
+sample_msg_049,notify,personal,"This is a direct, actionable personal inquiry regarding volunteer coordination for an upcoming event.",0.71,none
+sample_msg_050,digest,personal,The message is a non-urgent personal update that explicitly asks the user not to call tonight and states that nothing is urgent.,0.75,message_0054
+sample_msg_051,notify,urgent,"The message is an urgent request regarding a technical escalation starting in 20 minutes, which the user historically responds to within two minutes.",0.80,message_0228
+sample_msg_052,mute,scam,This message requests a 6-digit login code and is a near-duplicate of a previously reported scam attempt from the same sender.,0.87,message_0238
+sample_msg_053,mute,scam,"The message attempts a prompt injection and requests a one-time password (OTP) for wallet verification, indicating a severe scam risk.",0.75,message_0056

@@ -493,15 +493,21 @@ def _business_signals(message: Message, context: dict) -> dict:
         missing = "No business account row found for this message."
         return {key: missing for key in BUSINESS_SIGNAL_KEYS}
 
+    # The domain's age is what makes a mismatch meaningful. Established brands
+    # routinely send marketing from a separate long-lived domain; a scam sends
+    # from a lookalike registered days ago. Reporting the mismatch without the
+    # age invites the reader to treat both the same way.
     if business.official_domain != business.domain_used_by_sender:
         signals["domain_mismatch"] = (
             f"Sender domain {business.domain_used_by_sender!r} does not match "
-            f"the brand's official domain {business.official_domain!r}."
+            f"the brand's official domain {business.official_domain!r}, and was "
+            f"registered {business.domain_used_by_sender_age_days} days ago."
         )
     else:
         signals["domain_mismatch"] = (
             f"Sender domain matches the brand's official domain "
-            f"({business.official_domain})."
+            f"({business.official_domain}), registered "
+            f"{business.domain_used_by_sender_age_days} days ago."
         )
 
     signals["account_standing"] = (
