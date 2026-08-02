@@ -298,11 +298,11 @@ def latest_timestamp() -> datetime:
 # --------------------------------------------------------------------------
 
 
-def _tokens(text: str) -> set[str]:
+def tokens(text: str) -> set[str]:
     return set(re.findall(r"[a-z0-9]+", text.lower()))
 
 
-def _jaccard(left: set[str], right: set[str]) -> float:
+def jaccard(left: set[str], right: set[str]) -> float:
     if not left or not right:
         return 0.0
     union = len(left | right)
@@ -354,10 +354,10 @@ def _describe_outcome(event: MessageEvent | None) -> str:
 
 def _near_duplicate(message: Message) -> tuple[dict | None, str]:
     """Best Jaccard match against this user's history, with its outcome."""
-    incoming = _tokens(message.message_text)
+    incoming = tokens(message.message_text)
     best_row, best_score = None, 0.0
     for row in message_history().get(message.user_id, []):
-        score = _jaccard(incoming, _tokens(row.message_text))
+        score = jaccard(incoming, tokens(row.message_text))
         if score > best_score:
             best_row, best_score = row, score
 

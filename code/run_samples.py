@@ -18,6 +18,8 @@ from google.genai import errors as genai_errors
 from pydantic import ValidationError
 
 import loaders
+from decide import build_decision
+from gate import apply_gate
 from gemini_client import route_message
 from schema import OUTPUT_COLUMNS, RoutingDecision
 
@@ -41,33 +43,49 @@ def _fallback(message_id: str, problem: str) -> RoutingDecision:
     )
 
 
-def _decide(message) -> tuple[RoutingDecision, str | None]:
+def _decide(message, trim: bool, recompute_confidence: bool, gate: bool
+            ) -> tuple[RoutingDecision, str | None, list]:
     """Route one message. Returns the decision and a failure note, if any.
 
     A transport failure is not a prediction, so it is never papered over with a
     fallback row: it propagates and aborts the run. The cache makes the re-run
     resume where this one stopped.
     """
+    context = loaders.build_context(message)
     try:
-        raw = route_message(loaders.build_context(message))
+        raw = route_message(context)
     except json.JSONDecodeError as error:
         problem = f"model returned unparseable JSON: {error}"
-        return _fallback(message.message_id, problem), problem
+        return _fallback(message.message_id, problem), problem, []
 
     try:
-        return RoutingDecision(message_id=message.message_id, **raw), None
-    except (ValidationError, TypeError) as error:
+        decision = build_decision(
+            context, raw, trim=trim,
+            recompute_confidence=recompute_confidence,
+        )
+        overrides = []
+        if gate:
+            decision, overrides = apply_gate(context, decision)
+        return decision, None, overrides
+    except (ValidationError, TypeError, KeyError) as error:
         problem = str(error).replace("\n", " ")[:200]
-        return _fallback(message.message_id, problem), problem
+        return _fallback(message.message_id, problem), problem, []
 
 
-def run(output_path: Path) -> list[RoutingDecision]:
+def run(output_path: Path, trim: bool = True,
+        recompute_confidence: bool = True,
+        gate: bool = True) -> list[RoutingDecision]:
     messages = loaders.sample_messages()
-    decisions, failures = [], []
+    decisions, failures, all_overrides = [], [], []
+    print(f"evidence trimming: {'on' if trim else 'off'}   "
+          f"signal confidence: {'on' if recompute_confidence else 'off'}   "
+          f"gate: {'on' if gate else 'off'}")
 
     for index, message in enumerate(messages, start=1):
         try:
-            decision, problem = _decide(message)
+            decision, problem, overrides = _decide(
+                message, trim, recompute_confidence, gate)
+            all_overrides.extend(overrides)
         except genai_errors.APIError as error:
             sys.exit(
                 f"\nAborted at {message.message_id} after {index - 1} of "
@@ -82,9 +100,10 @@ def run(output_path: Path) -> list[RoutingDecision]:
             print(f"[{index:>2}/{len(messages)}] {message.message_id}  "
                   f"VALIDATION FAILED -> fallback  ({problem})")
         else:
+            mark = "  <- GATED" if overrides else ""
             print(f"[{index:>2}/{len(messages)}] {message.message_id}  "
                   f"{decision.action:<6} {decision.message_type:<16} "
-                  f"conf={decision.confidence:.2f}")
+                  f"conf={decision.confidence:.2f}{mark}")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", newline="", encoding="utf-8") as handle:
@@ -94,6 +113,10 @@ def run(output_path: Path) -> list[RoutingDecision]:
             writer.writerow(decision.to_output_row())
 
     print(f"\nwrote {len(decisions)} rows to {output_path}")
+    if gate:
+        print(f"\ngate overrides: {len(all_overrides)}")
+        for override in all_overrides:
+            print(f"  {override.describe()}")
     if failures:
         print(f"{len(failures)} row(s) fell back to "
               f"{FALLBACK_ACTION}/{FALLBACK_TYPE}:")
@@ -105,5 +128,15 @@ def run(output_path: Path) -> list[RoutingDecision]:
 
 
 if __name__ == "__main__":
-    destination = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_OUTPUT
-    run(destination)
+    # --raw disables both stages, --trim-only disables the confidence stage.
+    # Every variant reads the same cached responses, so switching costs nothing.
+    flags = {arg for arg in sys.argv[1:] if arg.startswith("--")}
+    positional = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
+
+    destination = Path(positional[0]) if positional else DEFAULT_OUTPUT
+    run(
+        destination,
+        trim="--raw" not in flags,
+        recompute_confidence=not flags & {"--raw", "--trim-only"},
+        gate=not flags & {"--raw", "--trim-only", "--no-gate"},
+    )
